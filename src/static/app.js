@@ -569,6 +569,16 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="share-section">
+        <span class="share-label">Share:</span>
+        <div class="share-buttons">
+          <button class="share-button share-email" data-activity="${name}" title="Share by Email">✉️</button>
+          <button class="share-button share-twitter" data-activity="${name}" title="Share on X">🐦</button>
+          <button class="share-button share-facebook" data-activity="${name}" title="Share on Facebook">📘</button>
+          <button class="share-button share-whatsapp" data-activity="${name}" title="Share on WhatsApp">💬</button>
+          <button class="share-button share-copy" data-activity="${name}" title="Copy Link">🔗</button>
+        </div>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -587,7 +597,66 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Add click handlers for share buttons
+    setupShareButtons(activityCard, name, details);
+
     activitiesList.appendChild(activityCard);
+  }
+
+  // Build a shareable link and message for an activity
+  function buildShareContent(name, details) {
+    const url = `${window.location.origin}${window.location.pathname}?activity=${encodeURIComponent(
+      name
+    )}`;
+    const text = `Check out the "${name}" activity at Mergington High School! ${details.description}`;
+    return { url, text };
+  }
+
+  // Wire up the share buttons on an activity card
+  function setupShareButtons(activityCard, name, details) {
+    const { url, text } = buildShareContent(name, details);
+
+    const emailButton = activityCard.querySelector(".share-email");
+    emailButton.addEventListener("click", () => {
+      const subject = encodeURIComponent(`Join me in ${name}!`);
+      const body = encodeURIComponent(`${text}\n\n${url}`);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    });
+
+    const twitterButton = activityCard.querySelector(".share-twitter");
+    twitterButton.addEventListener("click", () => {
+      const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+        text
+      )}&url=${encodeURIComponent(url)}`;
+      window.open(shareUrl, "_blank", "noopener,noreferrer");
+    });
+
+    const facebookButton = activityCard.querySelector(".share-facebook");
+    facebookButton.addEventListener("click", () => {
+      const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        url
+      )}`;
+      window.open(shareUrl, "_blank", "noopener,noreferrer");
+    });
+
+    const whatsappButton = activityCard.querySelector(".share-whatsapp");
+    whatsappButton.addEventListener("click", () => {
+      const shareUrl = `https://wa.me/?text=${encodeURIComponent(
+        `${text} ${url}`
+      )}`;
+      window.open(shareUrl, "_blank", "noopener,noreferrer");
+    });
+
+    const copyButton = activityCard.querySelector(".share-copy");
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        showMessage("Activity link copied to clipboard!", "success");
+      } catch (error) {
+        console.error("Error copying link:", error);
+        showMessage("Could not copy link. Please copy it manually.", "error");
+      }
+    });
   }
 
   // Event listeners for search and filter
