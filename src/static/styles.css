@@ -32,6 +32,22 @@
   --info-light: #d1ecf1;
 }
 
+body.dark-mode {
+  color-scheme: dark;
+  --background: #121212;
+  --surface: #1e1e1e;
+  --text-primary: #f5f5f5;
+  --text-secondary: #bdbdbd;
+  --border: #424242;
+  --border-light: #303030;
+  --border-focus: #757575;
+  --primary-light: #7c83d1;
+  --success-light: #1b3b1e;
+  --warning-light: #4a3800;
+  --error-light: #4a1c1c;
+  --info-light: #153d44;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -296,6 +312,11 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
+}
+
+input {
+  background-color: var(--surface);
+  color: var(--text-primary);
 }
 
 /* Tooltip styles */
@@ -617,6 +638,8 @@ footer {
   position: absolute;
   top: 10px;
   right: 15px;
+  display: flex;
+  gap: 8px;
 }
 
 #user-status {
@@ -648,6 +671,10 @@ footer {
 
 .icon-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+#theme-toggle {
+  white-space: nowrap;
 }
 
 .user-icon {
